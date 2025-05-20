@@ -25,5 +25,11 @@ jobs:
           role-to-assume: arn:aws:iam::540095405023:role/GitHubActionsOIDCRole
           aws-region: us-east-2
 
-      - name: Run AWS CLI
-        run: aws sts get-caller-identity
+      - name: Zip the Lambda function
+        run: zip oidc_test_function.zip lambda_function.py
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name oidc-test-lambda \
+            --zip-file fileb://oidc_test_function.zip
